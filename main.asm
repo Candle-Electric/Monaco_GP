@@ -1,13 +1,11 @@
 ;******************************************************************************
 ; Monaco GP: Main ASM file
 ;******************************************************************************
-; October 14, 2022
-;******************************************************************************
 
 ;=======================;
-;	Prepare Application	;
+;  Prepare Application  ;
 ;=======================;
-    .org	0
+    .org	$00
 	jmpf	start
 
 	.org	$3
@@ -69,12 +67,13 @@ p3_last_input           =       $5      ; 1 byte
 ;******************************************************************************
 ; Game Header
 ;******************************************************************************
-
     .org   $200
-     .include "GameHeader.i"
+    .include "GameHeader.i" ; .include "../Advent_Wreath_Upload/GameHeader.i" ; .include "GameHeader.i"
 ; Credits/Thanks:	
 	.org	$680
     .byte    " Monaco GP VMU  "
+    .byte   "  Dedicated To  "
+    .byte   " Alfredo.  O:-) "
     .byte   "Thanks To:      "
     .byte   "Kresna Susila,  "
     .byte   "Walter Tetzner, "
@@ -83,36 +82,75 @@ p3_last_input           =       $5      ; 1 byte
     .byte   "Marcus Comstedt,"
     .byte   "Sebastian Mihai,"
     .byte   "Tyco,Trent,Speud"
-    .byte   "RetroOnyx,      "
+    .byte   "RetroOnyx,Ian M."
+    .byte   "B.Leeto,NeoGeoF,"
+    .byte   "B.Squirrel,Akane"
+    .byte   "Sega Retro,     "
     .byte   "Ben Geeves,     "
+    .byte   "All OG Monaco GP"
+    .byte   "Players + Staff,"
     .byte   "  And Many More."
     .byte   "And You,        "
-    .byte   "    For Playing!"
+    .byte   "    For Playing!" 
+    .byte   "...Both This And"
     .byte   "Happy Advent!:-)"
     .byte   "BLCARLOA,STFEAIF"
     .byte   "HBD,+M.!GBRDDRAA"
     
+
 Start:
+	clr1 ie,7
+	mov #$a1,ocr
+	mov #$09,mcr
+	mov #$80,vccr
+	clr1 p3int,0
+	clr1 p1,7
+	mov #$ff,p3
+	set1 ie,7
+	
+	;clr1 psw,1
+	;ld $lc
+	;set1 psw,1
 
 Main_Loop:
         callf    Title_Screen
         callf    Driving_Test
-        jmpf    Main_Loop
+        jmpf     Main_Loop
 
-        ; .include        "./lib/libperspective.asm"
-        .include        "./lib/libperspective_long.asm"
+        ; .include      "./lib/libperspective.asm" ; Courtesy of Kresna Susila. 
+        .include        "./lib/libperspective_long.asm" ; Adapted From Original Code (C) Kresna Susila - 2018. Edited LibPerspective File; Lots Of Calls Replaced With CallF To Circumvent Build Errors From This Monaco GP Code.
         .include        "./lib/libkcommon.asm"
         .include        "./src/TitleScreen.asm"
-        .include        "./src/Driving_Test.asm"
+        .include        "./src/Driving_Test_CleanedUp.asm"
+        ; .include      "./src/Game_Over_Screen.asm"
         .include        "./img/MGP_TSBG.asm"
+        .include        "./lib/sfr.i" ; VMU Special Function Register Mapping
+        .include        "./lib/MonacoGP_AdditionalFunctions.asm"
+		
+        .include        "./img/Player_Car_B.asm"
+        .include        "./img/Player_Car_W.asm"
+        .include        "./img/Test_Track.asm"
         .include        "./img/Player_Car_B_Mask.asm"
         .include        "./img/Player_Car_W_Mask.asm"
+        .include        "./img/Gear_Marker_High.asm"
+        .include        "./img/Gear_Marker_Low.asm"
+        .include        "./img/Numbers/Zero.asm"
+        .include        "./img/Numbers/One.asm"
+        .include        "./img/Test_Track_0.asm"
+        .include        "./img/Test_Track_1.asm"
+        .include        "./img/Test_Track_2.asm"
+        .include        "./img/Test_Track_3.asm"
+        .include        "./img/Test_Track_4.asm"
+        .include        "./img/Test_Track_5.asm"
+        .include        "./img/Test_Track_6.asm"
+        .include        "./img/Test_Track_7.asm"
         .include        "./img/Collision_Debugging_Up.asm"
         .include        "./img/Collision_Debugging_Down.asm"
         .include        "./img/Collision_Debugging_Left.asm"
         .include        "./img/Collision_Debugging_Right.asm"
         .include        "./img/Collision_Debugging_Above.asm"
         .include        "./img/Collision_Debugging_Below.asm"
+        .include        "./img/BruhWhoa.asm"
         .include        "./img/Player_Car_Collision_0.asm"
         .include        "./img/Player_Car_Collision_0_Mask.asm"
         .include        "./img/Player_Car_Collision_1_Mask.asm"
@@ -143,7 +181,6 @@ Main_Loop:
         .include        "./img/RoadTesture_Step5.asm"
         .include        "./img/RoadTesture_Step6.asm"
         .include        "./img/RoadTesture_Step7.asm"
-        .include        "./lib/MonacoGP_AdditionalFunctions.asm"
         .include        "./img/Number_3.asm"
         .include        "./img/Number_4.asm"
         .include        "./img/Number_0.asm"
@@ -180,7 +217,7 @@ Main_Loop:
         .include        "./img/Player_Car_Collision_4_Mask.asm"
         .include        "./img/Player_Car_Collision_5_Mask.asm"
         .include        "./img/Player_Car_Collision_6_Mask.asm"
-        ; .include        "./img/Player_Car_Collision_7_Mask.asm"
+        ;.include       "./img/Player_Car_Collision_7_Mask.asm"
         .include        "./img/HUD_Spacer.asm"
         .include        "./img/Puddle_Mask.asm"
         .include        "./img/Puddle_Splash_Mask2.asm"
@@ -315,7 +352,7 @@ Main_Loop:
         .include        "./img/Starting_Line/Starting_Line_Blocks_92.asm"
         .include        "./img/Starting_Line/Starting_Line_Blocks_94.asm"
         .include        "./img/Starting_Line/Starting_Line_Blocks_96.asm"
-        ;.include        "./img/Lives_Counter_0.asm"
+        ;.include       "./img/Lives_Counter_0.asm"
         .include        "./img/Lives_Counter_1.asm"
         .include        "./img/Lives_Counter_2.asm"
         .include        "./img/Lives_Counter_3.asm"
@@ -381,11 +418,16 @@ Main_Loop:
         .include        "./img/StickFigure_0_Mask.asm"
         .include        "./img/StickFigure_1_Mask.asm"
         .include        "./img/StickFigure_2_Mask.asm"
-        .include        "./lib/sfr.i"       ; VMU Special Function Register Mapping
         .include        "./img/Ambulance_Banner.asm"
         .include        "./img/Game_Over_Text.asm"
+        .include        "./img/Game_Over_Screen_Text.asm"
         .include        "./img/Bridge_Banner.asm"
         .include        "./img/Congratulations_You_Win.asm"
+        .include        "./img/Headlight_Front_Mask.asm"
+        .include        "./img/Headlight_Back_Mask.asm"
+        .include        "./img/Ambulance_Point_Marker_Sprite_Mask.asm"
+        .include        "./img/Title_Screen_Graphic.asm"
+        .include        "./img/Great_Driving_Message_Mask.asm"
 
 ;******************************************************************************
 ; End of File
