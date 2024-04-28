@@ -114,14 +114,14 @@ Start:
 
 Main_Loop:
         callf    Title_Screen
-        callf    Driving_Test
+        callf    Driving_Gameplay
         jmpf     Main_Loop
 
         ; .include      "./lib/libperspective.asm" ; Courtesy of Kresna Susila. 
         .include        "./lib/libperspective_long.asm" ; Adapted From Original Code (C) Kresna Susila - 2018. Edited LibPerspective File; Lots Of Calls Replaced With CallF To Circumvent Build Errors From This Monaco GP Code.
         .include        "./lib/libkcommon.asm"
         .include        "./src/TitleScreen.asm"
-        .include        "./src/Driving_Test_CleanedUp.asm"
+        .include        "./src/Driving_Gameplay.asm"
         ; .include      "./src/Game_Over_Screen.asm"
         .include        "./img/MGP_TSBG.asm"
         .include        "./lib/sfr.i" ; VMU Special Function Register Mapping
