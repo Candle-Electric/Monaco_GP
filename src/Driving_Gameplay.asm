@@ -100,7 +100,7 @@ T_BTN_DOWN1              equ     1
 T_BTN_UP1                equ     0
 ;-----------
 
-Driving_Test:
+Driving_Gameplay:
 
 ; Initialize Variables
 	mov	#40, player_car_x
