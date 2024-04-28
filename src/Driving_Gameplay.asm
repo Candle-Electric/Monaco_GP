@@ -287,7 +287,7 @@ Driving_Test:
 ;------------------------------------------------------------------------------
 ; Main Loop
 ;------------------------------------------------------------------------------
-.driving_test_loop
+.driving_gameplay_loop
 	clr1	ocr, 5		; This Makes GamePlay/FrameRate Faster (?)
 	Handle_Player_Input ; Cleanup Iffy, Come Back And Check This
 	Handle_Player_Acceleration
@@ -336,7 +336,7 @@ Driving_Test:
 ; Blit Screen, Etc.
 	P_Blit_Screen
 	not1	frame_flags, 5
-	jmpf .driving_test_loop
+	jmpf .driving_gameplay_loop
 	
 	
 ;------------------------------------------------------------------------------
