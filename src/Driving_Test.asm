@@ -1,8 +1,6 @@
  ;------------------------------------------------------------------------------
 ; Variables
 ;------------------------------------------------------------------------------
-; driving_bg_address		=		$7		; 2 Byte
-driving_anim_counter	=		$9		; 1 Byte
 player_car_x			=		$a		; 1 Byte
 player_car_y			=		$b		; 1 Byte
 player_car_speed		=		$c		; 1 Byte
@@ -10,8 +8,8 @@ player_car_spr_addr_b	=		$d		; 2 Bytes
 player_car_spr_addr_w	=		$f		; 2 Bytes
 frame_flags				=		$11		; 1 Byte
 speed_temp				=		$12		; 1 Byte
-player_gear				=		$13		; 1 Byte	; Consider using a Collision_Flags Bit For This. Make "Player_Flags"
-gear_icon_y				=		$14		; 1 Byte ; Change Back To 47 For Funny.	; Consider Using B? JK, This Can Be Yeeted; P_Draw_HUD Probably Handles It Now, Or Something. ; Rename It To Icy_Flags, or Use It As Part Of Puddle_Flags.
+player_gear				=		$13		; 1 Byte
+icy_direction			=		$14		; 1 Byte
 
 enemy_car_spr_addr_b	=		$15		; 2 bytes
 enemy_car_x				=		$17		; 1 byte
@@ -21,7 +19,6 @@ enemy_car_spr_addr_w	=		$1a		; 2 bytes
 enemy_car_flags			=		$1c		; 1 Byte -> 01010101
 enemy_speed_temp		=		$1d		; 1 Byte
 random_seed				=		$1e		; 1 Byte
-accel					=		$1f		; 1 Byte
 speed_remainder			=		$20		; 1 Byte
 speed_sign				=		$21		; 1 Byte
 temp_zeroes				=		$22		; 1 Byte
@@ -32,67 +29,64 @@ enemy_car2_x			=		$27		; 1 Byte
 enemy_car2_y			=		$28		; 1 Byte
 twocars_enabled			=		$29		; 1 Byte
 enemy_car2_speed		=		$2a		; 1 Byte
-enemy_car2_speed_temp	=		$2b		; 1 Byte
 track_pos_marker		=		$2c		; 1 Byte
 score					=		$2d		; 1 Byte
 collision_debugging_flags	=	$2e		; 1 Byte
-score_tracker			=		$2f ; $157	; 1 Byte		; What Is This? It's Used, But Check.
+score_tracker			=		$2f 	; 1 Byte
 collision_frame			=		$30		; 1 Byte
 road_rightboundary_ypos	=		$31		; 1 Bytes
 road_leftboundary_ypos	=		$32		; 1 Bytes
-score_ten_thousands_digit =		$33		; 1 Byte
+score_ten_thousands_digit	=	$33		; 1 Byte
 score_thousands_digit	=		$34		; 1 Byte
 score_hundreds_digit	=		$35		; 1 Byte
 score_tens_digit		=		$36		; 1 Byte
 score_ones_digit		=		$37		; 1 Byte
-score_low				=		$38		; 1 Byte	; You Actually Gotta Rename "Score" To This.
+score_low				=		$38		; 1 Byte
 score_high				=		$39		; 1 Byte
 score_low_over_127_bool	=		$3a		; 1 Byte
-timer	=	$3b
-timer_frame_flags	=	$3c
-RoadLeftVarCounter = $6d
-RoadLeftVarNum = $3d
-RoadRightVarCounter = $3e
-RoadRightVarNum	= $3f
-puddle_flags	=	$40 ; 0: On/Off (Input.). 1: On/Off (-Screen.). 2: Static/Splash. 3: Left/Right. ; 0913/0914: Consider Using 4 As Center, And The Last Three Of The Four As The Counter. Once It Reaches Four (Or Seven, Even), -- The Puddle Timer Is Done.
-puddle_x		=	$41
-puddle_y		=	$42
-puddle_spr_addr	=	$43
-puddle_timer	=	$45
-road_leftboundary	=	$46
-road_rightboundary	=	$47
-swerve_flags		=	$48
-swerve_timer		=	$49
-Environment_Flags_Old	=	$4a		;	7: Lives Or Timer. 6: 5: 4: 3: 2: Bridge. 1: Icy. 0: Regular Road. Consider Using 3 Of The Flags For The 3 Lives.
-Environment_Timer	=	$4b	;		Normal, Icy, Bridge, Normal To Icy, Normal To Bridge, Icy To Normal, Bridge To Normal
-Environment_Flags	=	$4c	;		0: Normal.	1: (Transition: Normal To Icy.).	2: (Transition: Normal To Bridge; Prep.).	3: (Transition: Normal To Bridge; Ready.).	 4: Icy. 5: (Transition: Icy To Normal.).	6: Bridge.	7: (Transition: Bridge To Normal.).
-Ambulance_X		=	$4d	; ^ Prep: Means That The Enemy Cars Are Moving To Bridge Positions. Ready: Means That They Are In Place.
-Ambulance_Y		=	$4e
-Ambulance_Sprite_Address	=	$4f ;, $4c
-Lives_Flag		=	$51
-Ambulance_Timer	=	$52
-score_digit_temp =	$53	; Was After Score_High
-Puddle_Left_Splash_Sprite_Address	=	$54 ;, $55. 2 Bytes
-Puddle_Right_Splash_Sprite_Address	=	$56 ;, $57. 2 Bytes
-Cars_In_Place_Bool	=	$58	; 1 Byte					4:	All In Place. 3:	Right Road Boundary. 2:	Left Road Boundary. 1: Car 2. 0: Car 1
-Invincibility_Flag	=	$59	; 1 Byte
-Invincibility_Timer	=	$60	; 1 Byte
-HUD_Banner_Number	=	$61	; 1 Byte
-HUD_Banner_Timer			=	$62	; 1 Byte
-FTestTimer	=	$63	;	1 Byte
-StickFigure_X	=	$64	;	1 Byte
-StickFigure_Y	=	$65	;	1 Byte
-StickFigure_Sprite_Address	=	$66	;	2 Bytes
-StickFigure_Frame	=	$68	; 1 Byte
-StickFigure_Bool	=	$69	; 1 Byte
-Ambulance_Frame		=	$6a	; 1 Byte
-Game_Over_Timer		=	$6b ; 1 Byte
-Game_Over_Bool		=	$6c ; 1 Byte
-Game_Over_Text_Sprite_Address = $6d	; 2 Bytes
+timer					=		$3b		; 1 Byte
+timer_frame_flags		=		$3c		; 1 Byte
+RoadLeftVarCounter		=		$9		; 1 Byte
+RoadLeftVarNum			=		$3d		; 1 Byte
+RoadRightVarCounter		=		$3e		; 1 Byte
+RoadRightVarNum			=		$3f     ; 1 Byte
+puddle_flags			=		$40		; 1 Byte. 0: On/Off (Input.). 1: On/Off (-Screen.). 2: Static/Splash. 3: Left/Right. ; 0913/0914: Consider Using 4 As Center, And The Last Three Of The Four As The Counter. Once It Reaches Four (Or Seven, Even), -- The Puddle Timer Is Done.
+puddle_x				=		$41		; 1 Byte
+puddle_y				=		$42     ; 1 Byte
+puddle_spr_addr			=		$43     ; 2 Bytes
+puddle_timer			=		$45     ; 1 Byte
+road_leftboundary		=		$46     ; 1 Byte
+road_rightboundary		=		$47		; 1 Byte
+swerve_flags			=		$48     ; 1 Byte
+swerve_timer			=		$49     ; 1 Byte
+Environment_Timer		=		$4b		; Normal, Icy, Bridge, Normal To Icy, Normal To Bridge, Icy To Normal, Bridge To Normal
+Environment_Flags		=		$4c		; 0: Normal.	1: (Transition: Normal To Icy.).	2: (Transition: Normal To Bridge; Prep.).	3: (Transition: Normal To Bridge; Ready.).	 4: Icy. 5: (Transition: Icy To Normal.).	6: Bridge.	7: (Transition: Bridge To Normal.).
+Ambulance_X				=		$4d		; 1 Byte
+Ambulance_Y				=		$4e		; 1 Byte
+Ambulance_Sprite_Address	=	$4f		; 2 Bytes
+Lives_Flag				=		$51		; 1 Byte
+Ambulance_Timer			=		$52		; 1 Byte
+score_digit_temp		=		$53		; 1 Byte
+Puddle_Left_Splash_Sprite_Address	=	$54 ; 2 Bytes
+Puddle_Right_Splash_Sprite_Address	=	$56 ; 2 Bytes
+Cars_In_Place_Bool		=		$58		; 1 Byte					4:	All In Place. 3:	Right Road Boundary. 2:	Left Road Boundary. 1: Car 2. 0: Car 1
+Invincibility_Flag		=		$59		; 1 Byte
+Invincibility_Timer		=		$60		; 1 Byte
+HUD_Banner_Number		=		$61		; 1 Byte
+HUD_Banner_Timer		=		$62		; 1 Byte
+StickFigure_X			=		$63		; 1 Byte
+StickFigure_Y			=		$65		; 1 Byte
+StickFigure_Sprite_Address	=	$66		; 2 Bytes
+; StickFigure_Frame		=		$68		; 1 Byte
+StickFigure_Bool		=		$69		; 1 Byte
+Ambulance_Frame			=		$6a		; 1 Byte
+Game_Over_Timer			=		$6b		; 1 Byte
+Game_Over_Bool			=		$6c		; 1 Byte
+Game_Over_Text_Sprite_Address = $6d		; 2 Bytes
 Headlight_Front_Sprite_Address	=	$6f	; 2 Bytes
 Headlight_Back_Sprite_Address	=	$71	; 2 Bytes
 Ambulance_Point_Marker_Sprite_Address = $73 ; 2 Bytes
-Great_Driving_Sprite_Address = $75 ; 2 Bytes
+Great_Driving_Sprite_Address =	$75		; 2 Bytes
 ;------------------------------------------------------------------------------
 
 ;-----------
@@ -128,8 +122,8 @@ Driving_Test:
 	mov #0, player_car_speed ; #30, player_car_speed ; #0, player_car_speed
 	mov #0, speed_temp
 	mov	#0, player_gear
-	mov	#24, gear_icon_y
-	mov	#3, Gear_Icon_Y ; #0, gear_icon_y	; Rename This.
+	mov	#24, icy_direction
+	mov	#3, icy_direction ; #0, gear_icon_y	; Rename This.
 
 	mov #%00000000, enemy_car_flags
 	mov #0, enemy_car_x
@@ -173,7 +167,7 @@ Driving_Test:
 	mov	#0, score_tracker
 	mov #0, enemy_speed_temp
 	mov	#0, collision_frame
-	mov	#0, score_low
+	; mov	#0, score_low
 	mov	#0, score_high
 	mov	#0, score_ten_thousands_digit
 	mov	#0, score_thousands_digit
@@ -246,7 +240,6 @@ Driving_Test:
 	mov	#0, HUD_Banner_Number
 	mov	#0, HUD_Banner_Timer
 	mov	#0, Cars_In_Place_Bool
-	mov	#12, FTestTimer
 	mov	#28, StickFigure_X
 	mov	#18, StickFigure_Y
 	mov	#<StickFigure_0_Mask, acc
@@ -255,10 +248,10 @@ Driving_Test:
 	mov	#>StickFigure_0_Mask, acc
 	st	trh
 	st	StickFigure_Sprite_Address+1
-	mov	#0, StickFigure_Frame
+	; mov	#0, StickFigure_Frame
 	mov	#0, StickFigure_Bool
 	mov	#0, Ambulance_Frame
-	mov	#100, Game_Over_Timer
+	mov	#10, Game_Over_Timer
 	mov	#0, Game_Over_Bool
 	mov	#<Game_Over_Text, acc
 	st	trl
@@ -295,180 +288,31 @@ Driving_Test:
 ; Main Loop
 ;------------------------------------------------------------------------------
 .driving_test_loop
-;------------------------------------------------------------------------------
-; Handle Input														28 Cycles
-;------------------------------------------------------------------------------
-	clr1	ocr, 5	; This Makes GamePlay/FrameRate Faster (?)
-	Handle_Player_Input
-
-;------------------------------------------------------------------------------
-; Handle Acceleration/Speed
-;------------------------------------------------------------------------------
-Handle_Player_Acceleration
-
-;------------------------------------------------------------------------------
-; Position Player Sprite (Vertical/Speed)
-;------------------------------------------------------------------------------
-Handle_Player_Screen_Placement
-
-;------------------------------------------------------------------------------
-; Position Player (Left/Right)
-;------------------------------------------------------------------------------
-; Check_Ambulance_Collision ; Moved This To Sit With "Check Enemy_Cars' Collision"
-Handle_Player_Steering
-
-;------------------------------------------------------------------------------
-; Handle Player Car's Swerve (Off-Road/Out-Of-Bounds)
-;------------------------------------------------------------------------------
-Handle_Player_Swerve
-
-;------------------------------------------------------------------------------
-; Position Car (Collision Animation)
-;------------------------------------------------------------------------------
-Handle_Player_Collision
-
-;------------------------------------------------------------------------------
-; Position Enemy Cars
-;------------------------------------------------------------------------------
-Position_Enemy_Cars
-
-;------------------------------------------------------------------------------
-; Handle Collision
-;------------------------------------------------------------------------------
-; Collision
-
-Check_Ambulance_Collision
-Check_Enemy_Cars_Collision
-
-;------------------------------------------------------------------------------
-; Handle Score
-;------------------------------------------------------------------------------
-Handle_Score
-
-;------------------------------------------------------------------------------
-; Draw Track
-;------------------------------------------------------------------------------
-Handle_Track_Movement
-Draw_Track
-Handle_Puddle	
-
-;------------------------------------------------------------------------------
-; Draw Player Car
-;------------------------------------------------------------------------------
-Draw_Player_Car
-
-;------------------------------------------------------------------------------
-; Draw Enemy Cars
-;------------------------------------------------------------------------------
-
-Draw_Enemy_Cars
-Draw_Ambulance
-Draw_Ambulance_Caution_Triangle
-
-
-
-
-
-;------------------------------------------------------------------------------
-; Draw HUD (Consider Moving Drawing Of Score Down Here, Since We Want That On Top Of The Cars)
-;------------------------------------------------------------------------------
-
-;.BGDraw_Bridge
-;	ld	Environment_Flags
-;	sub	#3
-;	bnz	.BGDraw_Done2
-;	P_Draw_Background_Constant	TestBG_Bridgey
-;.BGDraw_Done2
-.Draw_HUD_Banner
-	ld	HUD_Banner_Timer
-	bz	.Draw_HUD_Regular
-	dec	HUD_Banner_Timer
-	Draw_HUD_Banner
-	jmpf	.HUD_Done
-.Draw_HUD_Regular
+	clr1	ocr, 5		; This Makes GamePlay/FrameRate Faster (?)
+	Handle_Player_Input ; Cleanup Iffy, Come Back And Check This
+	Handle_Player_Acceleration
+	Handle_Player_Screen_Placement
+	Handle_Player_Steering
+	Handle_Player_Swerve
+	Handle_Player_Collision
+	Position_Enemy_Cars
+	; Check_Ambulance_Collision
+	Check_Enemy_Cars_Collision
+	Handle_Score
+	Handle_Track_Movement
+	Draw_Track
+	Handle_Puddle	
+	Draw_Player_Car
+	Draw_Enemy_Cars
+	Draw_Ambulance
+	; Draw_Ambulance_Caution_Triangle
 	Draw_HUD
-	; P_Draw_Timer timer
-.HUD_Done
-
-; HUD Transitions:
-	; If (Transition Flags)
-	; Decrement Said Flag ^, +/Or Increment It If You Prefer Or It's Easier.
-	; Draw_HUD_DMD Banner_Name_Number, HUD_Timer
-	; When HUD_Timer Reaches Limit, Turn Of Transition Flags.
-.handle_p
-;	Handle Environment_Flags
-	ld	player_car_speed
-	bz	.Skip_Environment_Timer_Decrement
-	dec	Environment_Timer
-.Skip_Environment_Timer_Decrement
-	ld	Environment_Timer
-	bnz	.Calculate_Timer
-	; not1	Environment_Flags, 0
-.EF_FromNormal ; .EF_ZeroToOne
-	ld	Environment_Flags
-	bnz	.EF_From_Icy ; .EF_OneToTwo
-	; If (Timer And Not Lives)
-	ld	Lives_Flag
-	bz	.Icy_From_Normal
-.Bridge_From_Normal
-	bp	score, 0, .Icy_From_Normal
-	mov	#4, Environment_Flags ;/
-	mov	#30, Environment_Timer
-	mov	#12, FTestTimer
-	clr1	Enemy_Car_Flags, 4
-	clr1	Enemy_Car_Flags, 5
-	jmpf	.Calculate_Timer
-.Icy_From_Normal
-	mov	#3, Environment_Flags ; inc	Environment_Flags ; mov #2,	Enviroment_Flags
-	; Else, Calculate If Score's Ones Digit Is Odd Or Even, And Send To Icy Or Bridge Accordingly.
-	mov	#30, Environment_Timer
-	mov	#3, HUD_Banner_Number ; 4
-	mov	#16, HUD_Banner_Timer
-	jmpf	.handle_p ; .Calculate_Timer
-.EF_From_Icy ;.EF_OneToTwo
-	ld	Environment_Flags
-	sub	#1
-	bnz	.EF_From_Bridge ; .EF_TwoToZero	; This Needs To Be Fixed, Since The Flag Will Be Set At The Transition Function.
-	mov	#5, Environment_Flags ; inc	Environment_Flags
-	mov	#30, Environment_Timer
-	; mov	#0, track_pos_marker
-	jmpf	.Calculate_Timer
-.EF_From_Bridge
-	ld	Environment_Flags
-	sub	#2
-	bnz	.EF_TwoToZero ; Rename This
-	mov	#6, Environment_Flags
-	mov	#30, Environment_Timer
-	mov	#0, Cars_In_Place_Bool
-	jmpf	.Calculate_Timer
-.EF_TwoToZero
-.Calculate_Timer
-	ld	Lives_Flag	;	Switch This To Have It As Like #200 Or Something, When In Timer Mode.
-	bnz	.skip_timer_frame_flags_reset
-; Check If It's Expired, And We Need To Switch To Lives.
-	bp	timer, 7, .Set_Timer_To_Lives
-	jmpf	.Countdown_Timer
-.Set_Timer_To_Lives
-	mov	#3, Lives_Flag
-	mov	#0, Collision_Debugging_Flags ; To Prevent Freezing/Softlocking When Player Is Crashing As The Timer Expires And Switches To Lives. Ok, Maybe This Didn't Work.
-	mov	#10, HUD_Banner_Timer
-	mov	#0, HUD_Banner_Number
-	jmp	.skip_timer_frame_flags_reset
-.Countdown_Timer
-	inc	timer_frame_flags
-	bn	timer_frame_flags, 2, .skip_timer_frame_flags_reset
-	mov	#0, timer_frame_flags
-	dec	timer
-	ld	timer
-	bz	.skip_timer_to_lives_transition
-	; Set The Lives Flag. Lives = 2/or/3.
-.skip_timer_to_lives_transition
-.skip_timer_frame_flags_reset
 
 ;================== Game Over
 .Game_Over_Check
 	ld	Game_Over_Bool
 	bz	.Game_Not_Over
+	ret
 	; jmpf	.Game_Over
 	sub	#1
 	bnz	.You_Win
@@ -476,8 +320,10 @@ Draw_Ambulance_Caution_Triangle
 	mov	#0, c
 	P_Draw_Sprite	Game_Over_Text_Sprite_Address, b, c
 	dec	Game_Over_Timer
+	; P_Blit_Screen
 	ld	Game_Over_Timer
 	bnz	.Game_Not_Over
+	ret
 .You_Win
 	P_Draw_Background_Constant	Congratulations_You_Win
 	P_Blit_Screen
@@ -487,111 +333,17 @@ Draw_Ambulance_Caution_Triangle
 	ret
 .Game_Not_Over
 
-;------------------------------------------------------------------------------
 ; Blit Screen, Etc.
-;------------------------------------------------------------------------------
 	P_Blit_Screen
 	not1	frame_flags, 5
 	jmpf .driving_test_loop
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 ;------------------------------------------------------------------------------
 ; MACROS AND FUNCTIONS:
 ;------------------------------------------------------------------------------
 
-%macro random
+%macro random ; Thanks Marcus For This Function From Tetris.ASM!
 	push b
 	push c
 	ld random_seed
@@ -606,26 +358,6 @@ Draw_Ambulance_Caution_Triangle
 	; add #$39
 	st random_seed
 %end
-
-; rand:
-; %macro rand2
-; 	push b
-; 	push c
-; 	ld random_seed
-; 	st b
-; 	mov #$4e,acc
-; 	mov #$6d,c
-; 	mul
-; 	st b
-; 	ld c
-; 	mov	#8, b
-; 	div
-; 	; add #$39
-; 	; st random_seed
-; 	ld	b
-; 	; add	#1
-; 	st RoadLeftVarCounter
-; %end	; ret
 
 rand3:
 	ld	score
@@ -649,7 +381,9 @@ rand3:
 %macro Handle_Player_Input
 .Get_Player_Input
 	ld	Game_Over_Bool
+	; jmpf .Continue_Playing
 	bz	.Continue_Playing
+	ret
 .Game_Over_Text
 	; mov		#Button_A, acc ; 2
 	; callf	Check_Button_Pressed ; 2
@@ -668,14 +402,14 @@ rand3:
 	callf	Check_Button_Pressed ; 2
 	bz		.not_a ; 2
 	not1	player_gear, 7 ; 1
-.not_a ; Note 12/7: Fix Inputs.
-.not_b
-	ld		p3 ; 1
-	bp		acc, T_BTN_B1, .not_accel ; 2
-	bp		player_gear, 7, .high_gear ; 2
+.not_a ; Note 12/7: Fix Inputs. ; Note 4/18: Consider moving these 4 lines into the start of Handle_Player_Acceleration
+.not_b	
 %end	
 	
 %macro Handle_Player_Acceleration
+	ld		p3
+	bp		acc, T_BTN_B1, .not_accel
+	bp		player_gear, 7, .high_gear
 .low_gear
 	bp	collision_debugging_flags, 4, .speednotmax
 .low_decelerate
@@ -685,31 +419,26 @@ rand3:
 	bz		.xbound
 	dec		player_car_speed
 	dec		player_car_speed
-	jmp		.xbound
+	jmpf		.xbound
 .low_accelerate
 	inc		player_car_speed
 	inc		player_car_speed
-	; dec		player_car_x
-	; dec		player_car_x
-	jmp		.xbound
+	jmpf		.xbound
 .high_gear
 .high_decelerate
 	bp		player_car_speed, 4, .high_accelerate
 	inc		player_car_speed
-	jmp		.xbound
+	jmpf		.xbound
 .high_accelerate
 	inc		player_car_speed
 	inc		player_car_speed
-	jmp		.xbound
+	jmpf		.xbound
 .not_accel
-	; ld		player_car_x
-	; sub		#40
-	; bz		.xbound
 	ld		player_car_speed
 	bz		.xbound
 	dec		player_car_speed
 .xbound
-	bn	player_car_speed, 5, .speednotmax; 00111111
+	bn	player_car_speed, 5, .speednotmax ; Enforce Speed Cap On Player's Car
 	mov	#32, player_car_speed
 .speednotmax
 %end	
@@ -719,21 +448,20 @@ rand3:
 	ld		player_car_speed
 	sub		#32
 	bnz		.skip_xset_1
-	mov		#3, speed_temp ; 32
-	;ret
-	jmp		.xset_done
+	mov		#3, speed_temp ; Speed = 32
+	jmpf	.xset_done
 .skip_xset_1
 	ld		player_car_speed
 	sub		#16
 	bnz		.skip_xset_2
-	mov		#2, speed_temp ; 16
-	jmp		.xset_done
+	mov		#2, speed_temp ; Speed > 16
+	jmpf	.xset_done
 .skip_xset_2
 	ld		player_car_speed
 	sub		#8
 	bnz		.skip_xset_3
-	mov		#1, speed_temp ; 8
-	jmp		.xset_done
+	mov		#1, speed_temp ; Speed > 8
+	jmpf	.xset_done
 .skip_xset_3
 	ld		player_car_speed
 	bnz		.xset_done
@@ -741,14 +469,15 @@ rand3:
 .xset_done
 	bn	collision_debugging_flags, 4, .skip_collision_xpos
 	mov		#0, speed_temp
-	mov		#0, player_car_speed
+	mov		#0, player_car_speed ; Stop The Player Car In The Event Of A Collision/Crash
 .skip_collision_xpos
 
 ; Set Y Position
-	ld		temp_zeroes
-	add		#40
+	; ld		temp_zeroes
+	; add		#40
+	mov #40, acc
 	sub		speed_temp ; The Original Game Actually Moved The Player Car *Up* On The Screen As Speed Increased, But we're Going To Move It Downward For Better Visibility For The Player, Because The VMU Screen Is So Small.
-	st		player_car_x
+	st		player_car_x ; Move The Player Car Toward The Edge Of The Screen As The Player Goes Faster
 %end
 
 %macro Handle_Player_Steering
@@ -759,15 +488,14 @@ rand3:
 	jmpf	.collision_animation
 	mov #%00000000, collision_debugging_flags ; This Should Probably Be Moved...
 .handle_y_icy
-	; bn	Environment_Flags, 0, .handle_y_normal
 	ld	Environment_Flags
 	sub	#5
-	bz	.handle_y_icy_left
+	bz	.handle_y_icy_left ; Use "Icy" Controls If The Road Is Icy...
 	add	#5
 	sub	#1
-	bz	.handle_y_icy_left
+	bz	.handle_y_icy_left ; ...Or If The Player's In The Environment Transition Off The Icy Road Back To The Normal Gravel...
 	ld	Puddle_Timer
-	bnz	.handle_y_icy_left
+	bnz	.handle_y_icy_left ; ...Or If The Player Just Skidded Over A Puddle.
 	jmpf	.handle_y_normal
 .handle_y_icy_left
 	ld		p3
@@ -775,31 +503,31 @@ rand3:
 	ld	player_car_y
 	sub	#24
 	bn	acc, 7, .handle_y_icy_right
-	clr1	Gear_Icon_Y, 1
+	clr1	Icy_Direction, 1
 	inc	player_car_y
 	inc	player_car_y
 	inc	player_car_y
 	jmpf	.enemy_car_down
 .handle_y_icy_right
 	ld	p3
-	bp	acc, T_BTN_UP1, .handle_y_icy_neutral_left ; Re-Remove The "Neutral" Here For A Freeze When Hitting The Right Boundary.
+	bp	acc, T_BTN_UP1, .handle_y_icy_neutral_left
 	ld	player_car_y
 	sub	#5
 	bp	acc, 7, .handle_y_icy_neutral_left
-	set1	Gear_Icon_Y, 1	; Rename This Gear_Icon_Y To Icy_Direction, Consider Using It For Puddle Direction.
+	set1	Icy_Direction, 1
 	dec	player_car_y
 	dec	player_car_y
 	dec	player_car_y
 	jmpf	.enemy_car_down
 .handle_y_icy_neutral_left
-	bp	gear_icon_y, 1, .handle_y_icy_neutral_right
+	bp	Icy_Direction, 1, .handle_y_icy_neutral_right
 	ld	player_car_y
 	sub	#24
 	bn	acc, 7, .handle_y_icy_neutral_right
 	inc	player_car_y
 	jmpf	.keep_bouncing
 .handle_y_icy_neutral_right
-	bn	gear_icon_y, 1, .done_being_icy
+	bn	Icy_Direction, 1, .done_being_icy
 	ld	player_car_y
 	sub	#5
 	bp	acc, 7, .done_being_icy
@@ -809,40 +537,29 @@ rand3:
 
 ; Handle Player Car Steering (Normal Road)
 .handle_y_normal
-; If In Low Gear, And Player Presses Left:
 	ld		p3
 	bp		acc, T_BTN_DOWN1, .not_left_low
-.handle_y_low
+.handle_y_low ; If In Low Gear, And Player Presses Left:
 	bp		player_gear, 7, .handle_y_high
-; If d_sprite_x != 32:
-	ld		player_car_y
-	sub		#32
-	bz		.not_left_low
 	inc		player_car_y
 	br		.not_right_low
-.not_left_low
+.not_left_low ; If In Low Gear, And Player Presses Right:
 	bp	player_gear, 7, .handle_y_high
-; If Player Presses Right:
 	ld	p3
 	bp	acc, T_BTN_UP1, .not_right_low
 	dec	player_car_y
 .not_right_low
 .handle_y_high
 	ld		p3
-	bp		acc, T_BTN_DOWN1, .not_left_high
-bn	player_gear, 7, .not_right_high
-; If d_sprite_x != 32
-	ld		player_car_y
-	sub	#32
-	bz		.not_left_high
+	bp		acc, T_BTN_DOWN1, .not_left_high ; If In High Gear, And Player Presses Left:
+	bn	player_gear, 7, .not_right_high
 	inc		player_car_y
 	inc		player_car_y
 	br		.not_right_high
 .not_left_high
 	bn	player_gear, 7, .not_right_high
-	; If Player Presses Right
 	ld	p3
-	bp	acc, T_BTN_UP1, .not_right_high
+	bp	acc, T_BTN_UP1, .not_right_high ; If In High Gear, And Player Presses Right
 	dec	player_car_y
 	dec	player_car_y
 .not_right_high
@@ -867,18 +584,9 @@ bn	player_gear, 7, .not_right_high
 .Temp_Invincibilty
 	ld	Invincibility_Flag
 	bz	.Do_Swerve_Check
-	; bn	swerve_flags, 6, .Do_Swerve_Check ; Clean This Up Later.
-	ld	invincibility_timer ; swerve_timer
+	ld	invincibility_timer
 	bz	.End_Invincibility
-	dec	invincibility_timer ; dec	swerve_timer
-	;ld	player_car_y
-	;sub	road_rightboundary ; `Might Be Able To Do Just One Side, If We Have The Player Always Exit Crash On The Right, As Per The Arcade Version.
-	;sub	#3
-	;bn	acc, 7, .End_Invincibility
-	;ld	player_car_y
-	;sub	road_leftboundary
-	;add	#3
-	;bp	acc, 7, .End_Invincibility
+	dec	invincibility_timer ; Commented Out A Big Block Here Where The Invincibility Ended After Re-Entering The Road. Wanna Reinstate That?
 	jmpf	.swerve_check_none
 .End_Invincibility
 	mov	#0, Invincibility_Flag
@@ -886,7 +594,7 @@ bn	player_gear, 7, .not_right_high
 	mov	#%00000000, swerve_flags
 	mov	#0, swerve_timer
 	jmpf	.swerve_check_none
-.Do_Swerve_Check
+.Do_Swerve_Check ; Is this Called and assigned every time? I don't see how it's skipped... ; bz swerve timer, 0, .outta_here?
 	mov	#<Player_Car_SWerve_L_Mask, acc
 	st	trl
 	st	player_car_spr_addr_w
@@ -901,27 +609,26 @@ bn	player_gear, 7, .not_right_high
 	st	player_car_spr_addr_b+1
 	ld	road_rightboundary
 	sub	player_car_y
-	sub #2 ; add	#2
+	sub #2
 	st	b
 	bp	b, 7, .swerve_check_down
 	ld	b
 	add	swerve_timer
 	st	swerve_timer
 	set1	swerve_flags, 7
-	jmpf	.swerve_check_done; _road ; _done
-.swerve_check_down ; up
+	jmpf	.swerve_check_done
+.swerve_check_down
 	ld	player_car_y
 	sub	road_leftboundary
-	add #7 ; 5 ; 1 ;7 ; add	#7 ; sub	#2
+	add #7
 	st	b
-	bp	b, 7, .swerve_check_road ; _done ; _road
+	bp	b, 7, .swerve_check_road
 	ld	b
 	add	swerve_timer
 	st	swerve_timer
-	set1	swerve_flags, 7 ; enemy_car_flags, 5
+	set1	swerve_flags, 7
 	jmpf	.swerve_check_done
-	; inc	swerve_flags
-.swerve_check_road
+.swerve_check_road ; Return The Player Car Sprite Back To Its "Driving Straight Ahead" Graphics
 	clr1	swerve_flags, 7
 	mov	#<Player_Car_B_Mask, acc
 	st	trl
@@ -935,33 +642,28 @@ bn	player_gear, 7, .not_right_high
 	mov	#>Player_Car_W_Mask, acc
 	st	trh
 	st	player_car_spr_addr_w+1
-	;ld	.swerve_timer swerve_flags
-	;bz	.swerve_reset
-	;bp	acc, 7, 
-;.swerve_reset
 .swerve_check_done
 .handle_swerve_timer
-	; bp	swerve_timer, 6, .crash_swerve ; swerve_flags, 4, .crash_swerve
 	ld	swerve_timer
 	bz	.swerve_check_none
 	sub	#20
 	bn	acc, 7, .crash_swerve
 	bp	swerve_timer, 7, .swerve_check_none
-	dec	swerve_timer ; swerve_flags
+	dec	swerve_timer
 	jmpf	.enemy_car_down
 .crash_swerve
-	set1	collision_debugging_flags, 4 ; ret
+	set1	collision_debugging_flags, 4
 	jmpf	.collision_animation
 .swerve_check_none
 
-;This Was In .not_right_high...
-	jmpf	.enemy_car_down
+;This Was In .not_right_high... ; O.K., it is needed after all. Hmmm...
+	jmpf	.enemy_car_down ; Skip The Rest Of The Player Car Calculations And Jump To Enemy Cars
 %end
 
 %macro Handle_Player_Collision
 .collision_animation
 	ld	Lives_Flag ; If Lives, Do The Explosion Animation And Decrement Lives By One.
-	bnz	.Do_Explosion ; bz	.Collision_Bounce
+	bnz	.Do_Explosion
 	jmpf	.Collision_Bounce
 .Do_Explosion
 .Draw_Explosion
@@ -975,7 +677,6 @@ bn	player_gear, 7, .not_right_high
 	mov	#>Explosion_Mask_0, acc
 	st	trh
 	st	player_car_spr_addr_b+1
-	; inc	collision_frame
 	jmpf	.Keep_Bouncing
 .Draw_Explosion_Frame_1
 	ld	collision_frame
@@ -992,7 +693,6 @@ bn	player_gear, 7, .not_right_high
 	st	StickFigure_X
 	ld	player_car_y
 	st	StickFigure_Y
-	;inc	collision_frame
 	jmpf	.Keep_Bouncing
 .Draw_Explosion_Frame_2
 	ld	collision_frame
@@ -1004,7 +704,6 @@ bn	player_gear, 7, .not_right_high
 	mov	#>Explosion_Mask_2, acc
 	st	trh
 	st	player_car_spr_addr_b+1
-	;inc	collision_frame
 	jmpf	.Keep_Bouncing
 .Draw_Explosion_Frame_3
 	ld	collision_frame
@@ -1016,7 +715,6 @@ bn	player_gear, 7, .not_right_high
 	mov	#>Explosion_Mask_3, acc
 	st	trh
 	st	player_car_spr_addr_b+1
-	;inc	collision_frame
 	jmpf	.Keep_Bouncing
 .Draw_Explosion_Frame_4
 	ld	collision_frame
@@ -1028,24 +726,23 @@ bn	player_gear, 7, .not_right_high
 	mov	#>Explosion_Mask_4, acc
 	st	trh
 	st	player_car_spr_addr_b+1
-	;inc	collision_frame
 	jmpf	.Keep_Bouncing
 .Explosion_Done
 	ld	collision_frame
 	sub	#5
-	bz	.Finish_Explosion ; bn	acc, 7, .Finish_Explosion ; bp	acc, 7, .Keep_Bouncing
+	bz	.Finish_Explosion
 	jmpf	.Keep_Bouncing
 .Finish_Explosion	 ; 
 	mov	#0, collision_debugging_flags
 	mov	#0, collision_frame
-	mov	#3, Player_Car_Y ; X
+	mov	#3, Player_Car_Y
 	mov	#<Player_Car_B_Mask, acc
 	st	trl
 	st	player_car_spr_addr_b
 	mov	#>Player_Car_B_Mask, acc
 	st	trh
 	st	player_car_spr_addr_b+1
-	mov	#20, swerve_timer ; #0, swerve_timer ; Moved This Reset To End-Invinciblity Section; Now, It's Used To Count Down Said Invincibility To Da Swerve.
+	mov	#20, swerve_timer ; Moved This Reset To End-Invinciblity Section; Now, It's Used To Count Down Said Invincibility To Da Swerve.
 	set1	Swerve_Flags, 6
 	clr1	Swerve_Flags, 7
 	dec	Lives_Flag
@@ -1059,15 +756,11 @@ bn	player_gear, 7, .not_right_high
 	jmpf	.BannerLivesNumber_Chosen
 .Draw_2LivesBanner
 	add	#1
-	; ld	Lives_Flag
-	; sub	#2
 	bnz	.Draw_1LivesBanner
 	mov	#1, HUD_Banner_Number
 	jmpf	.BannerLivesNumber_Chosen
 .Draw_1LivesBanner
 	add	#1
-	; ld	Lives_Flag
-	; sub	#1
 	bnz	.BannerLivesNumber_Chosen
 	mov	#2, HUD_Banner_Number
 .BannerLivesNumber_Chosen
@@ -1075,47 +768,39 @@ bn	player_gear, 7, .not_right_high
 	ld	Lives_Flag
 	bnz	.SkipGameOver
 	mov	#1, Game_Over_Bool
-	mov	#20, Game_Over_Timer
-	ret
+	mov	#1, Game_Over_Timer ;#20
+	ret ; 4/24
 .SkipGameOver
 	jmpf	.Keep_Bouncing
 .Collision_Bounce
-	inc	collision_frame ;
-	; inc	collision_frame ;
-	; inc	collision_frame ;
-	; ld	collision_frame
-	; bne	#7, .skip_coll_reset
-	bn	collision_frame, 3, .skip_coll_reset ;bp
-	ld	collision_frame  ; mov	#0, collision_frame
+	inc	collision_frame
+	bn	collision_frame, 3, .skip_coll_reset
+	ld	collision_frame
 	sub #8
 	st	collision_frame
 .skip_coll_reset
-	;
+; Rename These To _Explosion_ Frame Whatever:
 .draw_frame_0
 	ld	collision_frame
 	bnz	.draw_frame_1
-	; bp	frame_flags, 5, .draw_frame_1
-	mov	#<Player_Car_Collision_0_Mask, acc ;_Mask, acc _Mask, acc
+	mov	#<Player_Car_Collision_0_Mask, acc
 	st	trl
 	st	player_car_spr_addr_b
-	; st	player_car_spr_addr_b+1
-	mov	#>Player_Car_Collision_0_Mask, acc ;_Mask, acc, acc
+	mov	#>Player_Car_Collision_0_Mask, acc
 	st	trh
 	st	player_car_spr_addr_b+1
-	jmpf	.player_crashing_left ; jmpf	.draw_frame_2
+	jmpf	.player_crashing_left
 .draw_frame_1
 	ld	collision_frame
 	sub	#1
 	bnz	.draw_frame_2
-	; bn	frame_flags, 5, .draw_frame_2
-	mov	#<Player_Car_Collision_1_Mask, acc ;_Mask, acc
+	mov	#<Player_Car_Collision_1_Mask, acc
 	st	trl
 	st	player_car_spr_addr_b
-	; st	player_car_spr_addr_b+1
 	mov	#>Player_Car_Collision_1_Mask, acc
 	st	trh
 	st	player_car_spr_addr_b+1
-	jmpf	.player_crashing_left ;jmp	.draw_frame_2
+	jmpf	.player_crashing_left
 .draw_frame_2
 	ld	collision_frame
 	sub	#2
@@ -1169,11 +854,10 @@ bn	player_gear, 7, .not_right_high
 	ld	collision_frame
 	sub	#7
 	bnz	.player_crashing_left
-	mov	#<Player_Car_B_Mask, acc ; #<Player_Car_Collision_7_Mask, acc
+	mov	#<Player_Car_B_Mask, acc
 	st	player_car_spr_addr_b
-	mov	#>Player_Car_B_Mask, acc ; #>Player_Car_Collision_7_Mask, acc
+	mov	#>Player_Car_B_Mask, acc
 	st	player_car_spr_addr_b+1
-	; jmpf	
 .player_crashing_left
 	bp	collision_debugging_flags, 6, .player_crashing_right
 	ld	player_car_y
@@ -1193,7 +877,6 @@ bn	player_gear, 7, .not_right_high
 	sub	#3
 	bn	acc, 7, .keep_crashing_right
 	not1	collision_debugging_flags, 6
-	; inc	collision_bounce_tracker
 	inc	score_tracker
 	jmp	.check_bouncedone
 .keep_crashing_right
@@ -1209,21 +892,14 @@ bn	player_gear, 7, .not_right_high
 	mov	#>Player_Car_B_Mask, acc
 	st	trh
 	st	player_car_spr_addr_b+1
-	mov	#20, swerve_timer ; #0, swerve_timer ; Moved This Reset To End-Invinciblity Section; Now, It's Used To Count Down Said Invincibility To Da Swerve.
-	; set1	Swerve_Flags, 6
+	mov	#20, swerve_timer
 	clr1	Swerve_Flags, 7
-	; Set Invincibility_Flag. ^ Possibly Decrement Swerve_Timer Here When In Swerve Zone; Set It As Zero When On The Road. When It's Zero, Invincibility Is Up. Consider Using The HUD Timer For Swerve_Timer Debugging...
 	mov	#1, Invincibility_Flag
 	mov	#10, Invincibility_Timer
 .keep_bouncing
 %end
 
 %macro Position_Enemy_Cars
-; Ambulance Car 1 ; Leaving these two lines in here. This was for locking the Cars to bounce to the left/right of the Ambulance when it flies up the screen.
-	; When In Ambulance Transiton Mode: 	; ld	enemy_car_y 	; Is It Greater Than, Or Less Than Ambulance_Y? 	; Assign It To "Left" Or "Right" Accordingly. 	; If It's The Former, Left-Road < Enemy_Car_Y < Ambulance_Y. If It's The Latter, Ambulance_Y < Enemy_Car_Y < Right-Road. ; Move Enemy Car 1 ; Lock Y-Position, If On The Bridge. ; If Environment is Bridge, Transition Into Bridge, Or Transition Out Of Bridge, Move 'Em To The Columns.
-	
-	; Deleted a Bunch of Lines here that could probably all be replaced with a call to Get_Enemy_Cars_In_Place.
-	
 .Move_Enemy_Car1_Y
 	; bp	enemy_car_flags, 7, .enemy_car_y_done ; 9/29
 .enemy_car_down
@@ -1241,21 +917,15 @@ bn	player_gear, 7, .not_right_high
 	bnz	.enemy_car_y_done
 	not1	enemy_car_flags, 1
 .enemy_car_y_done
-
 	ld	player_car_speed
-	; bz	.speedDiffCalcDone
 	bz	.playerSpeedIsZero
 	sub	enemy_car_speed
 	st	speed_sign
 	st	c
 	bp	speed_sign, 7, .isNegative
 .isPositive
-	; ld	enemy_car_speed
-	; st	b
 	mov #4, b
-	; ld	player_car_speed
-	; ld	speed_sign
-	ld	temp_zeroes
+	ld	temp_zeroes ; Divide (Player Car Speed - Enemy Car Speed) By 4
 	div
 	ld	c
 	st	enemy_speed_temp
@@ -1273,35 +943,24 @@ bn	player_gear, 7, .not_right_high
 .poscase1
 	sub #1
 	bnz	.poscase2
-	bn	frame_flags, 0, .poscase2
-	bp	frame_flags, 1, .poscase2
+	bn	frame_flags, 0, .poscase2 ; Push The Enemy Car A Pixel Over On 1/4Th Of The Frames.
+	bp	frame_flags, 1, .poscase2 ; ^ "" ""
 	inc	enemy_car_x
 	jmpf	.speedDiffCalcDone
 .poscase2
 	ld	speed_remainder
 	sub	#2
 	bnz	.poscase3
-	bp	frame_flags, 0, .poscase3 ; This Works, Since It's Every Other Frame
-	;bn	frame_flags, 1, .poscase3
+	bp	frame_flags, 0, .poscase3 ; This Works, Since It's Every Other Frame.
 	inc	enemy_car_x
 	jmpf	.speedDiffCalcDone
 .poscase3
-	;sub #2
-	;bnz	.speedDiffCalcDone
-	;inc	enemy_car_x
 	ld	speed_remainder
 	sub	#3
 	bnz	.speedDiffCalcDone
-	;bp	frame_flags, 0, .speedDiffCalcDone
-	;bp	frame_flags, 1, .speedDiffCalcDone
 	inc	enemy_car_x
 	jmpf	.speedDiffCalcDone
-
 .isNegative
-	; ld	player_car_speed
-	; st	b
-	; ld	enemy_car_speed
-	; st	c
 	ld	enemy_car_speed
 	sub	player_car_speed
 	st	c
@@ -1315,7 +974,6 @@ bn	player_gear, 7, .not_right_high
 	st	enemy_car_x
 	ld	b
 	st speed_remainder
-	; mov #24, enemy_car_x
 .playerSpeedIsZero
 	ld	player_car_speed
 	bnz	.speedDiffCalcDone
@@ -1331,27 +989,7 @@ bn	player_gear, 7, .not_right_high
 	st	enemy_car_x
 .speedDiffCalcDone
 
-
-
-
-
-
-
-; Move Enemy Car 2
-; ld twocars_enabled
-; bz .skip_car2
-
-; Ambulance:
-; Get Ambulance Y-Value
-; Have Cars 1 And 3 To Its Left, Car 2 To Its Right
-; Then, Once That's All Set, Move The Ambulance Itself.
-; mov	#8, Ambulance_Speed (Or W/E We Want The Ambulance's Speed To Be.).
-; sub	player_speed(_temp?).
-; st	speed_temp
-; ld	ambulance_x
-; sub	speed_temp
-; st	Ambulance_X
-
+; Handle Ambulance Timer
 ld	Environment_Flags
 bnz	.Ambulance_Timer_Done
 ld	Environment_Timer
@@ -1366,8 +1004,6 @@ dec	Ambulance_Timer
 .Ambulance_Movement
 	ld	Ambulance_Timer
 	bnz	.Ambulance_Movement_Done
-	; When It's 0, Set The Ambulance At #120 Or Something, And Get The Two Enemy Cars Into Place.
-	; Possibly: If Environment_Timer > 20 And Ambulance Timer = 0, Do This. Or Something Similar. Alternatively, Only Decrement Ambulance_Timer If Environment_Flags Is 0 And Environment_Timer > 20.
 	mov	#40, acc
 	sub	player_car_speed
 	st	c
@@ -1384,10 +1020,8 @@ dec	Ambulance_Timer
 	add	#70
 	sub	#10
 	bp	acc, 7, .Skip_Ambulance_Banner
-	mov	#10, HUD_Banner_Timer
-	 mov	#5, HUD_Banner_Number ; callf	Draw_Ambulance_Banner_Animation ; P_Draw_Ambulance_Banner	HUD_Banner_Timer ; mov	#5, HUD_Banner_Number
-.Skip_Ambulance_Banner	;ld	b
-	;st speed_remainder
+	mov	#5, HUD_Banner_Number
+.Skip_Ambulance_Banner
 	bn	Ambulance_X, 7, .Ambulance_Movement_Done
 	mov	#127, Ambulance_X
 	mov	#20, Ambulance_Timer
@@ -1396,59 +1030,15 @@ dec	Ambulance_Timer
 	add	score_tens_digit
 	st	Ambulance_Y
 .Ambulance_Movement_Done
-.playerSpeedIsZero3
-;	ld	player_car_speed
-;	bnz	.speedDiffCalcDone2
-;	ld	enemy_car2_speed
-;	st	c
-;	mov	#4, b
-;	ld	temp_zeroes
-;	div
-;	ld	c
-;	st	enemy_speed_temp
-;	ld	enemy_car2_x
-;	sub	enemy_speed_temp
-;	st	enemy_car2_x
-;.speedDiffCalcDone2
-;.skip_car2
 
-
-; If 48 > Ambulance_X > 30, Calculate Collision.
-; When Ambulance Gets Off-Screen, Move It Back To #120, Reassign The X=Position, And Restart Ambulance_Timer.
-
-.Ambulance_Done
-
-; Lock Y-Position, If On The Bridge.
-	ld	Environment_Flags
-	sub	#4
-	bz	.enemy_car2_y_done
-	add	#4
-	sub	#2
-	bz	.Lock_Enemy_Car2_Y_Bridge
-	add	#2
-	sub	#6
-	bz	.Lock_Enemy_Car2_Y_Bridge
-	jmpf	.Move_Enemy_Car2_Y
-	;sub	#2
-	;bnz	.Move_Enemy_Car2_Y
-.Lock_Enemy_Car2_Y_Bridge
-	mov	#16, enemy_car2_y
-	jmpf	.enemy_car2_y_done
+; Handle Enemy Car #2:
 .Move_Enemy_Car2_Y
-
-; bp	enemy_car_flags, 7, .enemy_car2_y_done ; 9/29
-	ld	Environment_Flags
-	sub	#4
-	bz	.enemy_car2_y_done
 .enemy_car2_up
 	bp	enemy_car_flags, 3, .enemy_car2_down
 	dec	enemy_car2_y
 	dec	enemy_car2_y
 	ld	enemy_car2_y
-	;sub	#2
-	;bnz	.enemy_car2_up
-	;not1	enemy_car_flags, 3
-	sub road_rightboundary ;_ypos
+	sub road_rightboundary
 	sub	#2
 	bn	acc, 7, .enemy_car2_y_done
 	not1	enemy_car_flags, 3
@@ -1457,28 +1047,20 @@ dec	Ambulance_Timer
 	bn	enemy_car_flags, 3, .enemy_car2_y_done
 	inc	enemy_car2_y
 	inc	enemy_car2_y
-	ld	road_leftboundary ;_ypos
+	ld	road_leftboundary
 	sub enemy_car2_y
-	sub	#7 ; sub	#2
-	; sub	#22
+	sub	#7
 	bn	acc, 7, .enemy_car2_y_done
-	; bnz	.enemy_car2_y_done
 	not1	enemy_car_flags, 3
 .enemy_car2_y_done
-
 	ld	player_car_speed
-	; bz	.speedDiffCalcDone2
 	bz	.playerSpeedIsZero2
 	sub	enemy_car2_speed
 	st	speed_sign
 	st	c
 	bp	speed_sign, 7, .isNegative2
 .isPositive2
-	; ld	enemy_car2_speed
-	; st	b
 	mov #4, b
-	; ld	player_car_speed
-	; ld	speed_sign
 	ld	temp_zeroes
 	div
 	ld	c
@@ -1506,26 +1088,15 @@ dec	Ambulance_Timer
 	sub	#2
 	bnz	.poscase3_2
 	bp	frame_flags, 0, .poscase3_2 ; This Works, Since It's Every Other Frame
-	;bn	frame_flags, 1, .poscase3_2
 	inc	enemy_car2_x
 	jmpf	.speedDiffCalcDone2
 .poscase3_2
-	;sub #2
-	;bnz	.speedDiffCalcDone2
-	;inc	enemy_car2_x
 	ld	speed_remainder
 	sub	#3
 	bnz	.speedDiffCalcDone2
-	;bp	frame_flags, 0, .speedDiffCalcDone2
-	;bp	frame_flags, 1, .speedDiffCalcDone2
 	inc	enemy_car2_x
 	jmpf	.speedDiffCalcDone2
-
 .isNegative2
-	; ld	player_car_speed
-	; st	b
-	; ld	enemy_car2_speed
-	; st	c
 	ld	enemy_car2_speed
 	sub	player_car_speed
 	st	c
@@ -1539,7 +1110,6 @@ dec	Ambulance_Timer
 	st	enemy_car2_x
 	ld	b
 	st speed_remainder
-	; mov #24, enemy_car2_x
 .playerSpeedIsZero2
 	ld	player_car_speed
 	bnz	.speedDiffCalcDone2
@@ -1556,9 +1126,6 @@ dec	Ambulance_Timer
 .speedDiffCalcDone2
 .skip_car2
 
-
-
-
 bp	enemy_car2_x, 7, .enemy_car2_x_done
 	bn	enemy_car2_x, 6, .enemy_car2_x_done	
 	; bnz	.enemy_car2_x_done
@@ -1571,7 +1138,7 @@ bp	enemy_car2_x, 7, .enemy_car2_x_done
 	mov #54, enemy_car2_x
 .enemy_car2_x_done
 
-	; If Enemy_Car_X Is Between 64 And 127, Reset It.
+; If Enemy_Car_X Is Between 64 And 127, Reset It.
 	bp	enemy_car_x, 7, .enemy_car_x_done
 	bn	enemy_car_x, 6, .enemy_car_x_done	
 	; bnz	.enemy_car_x_done
@@ -1581,12 +1148,11 @@ bp	enemy_car2_x, 7, .enemy_car2_x_done
 	Change_Enemy_Car1_Speed
 	jmp	.enemy_car_x_done
 .player_stopped
-	mov #54, enemy_car_x
-	; Change_Enemy_Car1_Speed ; Set A Flag For This Instead. Bool Change_Enemy_Speed = True; Int Enemy_Car_To_Change = 1. In The Main Loop, If The Bool Is True, Do Change_Enemy_Car_Speed.
+	mov #54, enemy_car_x ; Next Line, Change_Enemy_Car1_Speed ; Set A Flag For This Instead. Bool Change_Enemy_Speed = True; Int Enemy_Car_To_Change = 1. In The Main Loop, If The Bool Is True, Do Change_Enemy_Car_Speed.
 .enemy_car_x_done
 %end
 
-%macro Handle_Score ; _Calculation?
+%macro Handle_Score
 	ld swerve_flags
 	bnz .Score_Done ; Don't Increment Score If The Player Is Off-Road.
 	ld	score
@@ -1624,7 +1190,7 @@ bp	enemy_car2_x, 7, .enemy_car2_x_done
 	add	speed_temp ; Move the Track Boundary Sprite based on how Fast the Player is moving.
 	st	track_pos_marker
 	ld	Environment_Flags
-	sub	#3 ; + 10-06: But, Only If Not In The Transition State.
+	sub	#3
 	bn	acc, 7, .skip_subtract_track
 	bn	track_pos_marker, 3, .skip_subtract_track ; Handle the Overflow; If Bit 3 Is Set, Subtract 8. 
 	ld	track_pos_marker
@@ -1642,19 +1208,18 @@ bp	enemy_car2_x, 7, .enemy_car2_x_done
 	mov	#80, Ambulance_X
 	mov	#80, Puddle_X
 	mov	#80, Enemy_Car_X
-	mov	#80, Enemy_Car2_X
-	; Make Sure To Skip Enemy_Car Movement Here, And Just Assign Them To Be Offscreen. Also, Consider Just Checking If Player X Is Off The Road, And Moving The Player To The Bound If So, Rather Than Editing The Controls. Disable The Swerve_Timer Here, Too.
+	mov	#80, Enemy_Car2_X ; Make Sure To Skip Enemy_Car Movement Here, And Just Assign Them To Be Offscreen. Also, Consider Just Checking If Player X Is Off The Road, And Moving The Player To The Bound If So, Rather Than Editing The Controls. Disable The Swerve_Timer Here, Too.
 	P_Draw_Starting_Line_Transition	track_pos_marker
 	ld	track_pos_marker
 	add	speed_temp
 	st	track_pos_marker
-	sub	#96 ;	#48 ;	sub	#144
-	bn	acc, 7, .Build_Error_4 ; bp	acc, 7, .BGDraw_Done
+	sub	#96
+	bn	acc, 7, .Build_Error_4
 	jmpf	.BGDraw_Done
 .Build_Error_4
 .EndTransition_StartingLine
 	ld	track_pos_marker
-	sub	#96 ; #48 ; #144
+	sub	#96
 	st	track_pos_marker
 	mov	#0, Environment_Flags
 	
@@ -1665,7 +1230,7 @@ bp	enemy_car2_x, 7, .enemy_car2_x_done
 	P_Draw_Road road_rightboundary_ypos, road_leftboundary_ypos, track_pos_marker, AllBlack
 	jmpf	.BGDraw_Done
 .Draw_Road_Icy ; (Flag = 1)
-	ld	Environment_Flags ; Might Be Able To Skip This, If We JMPF Properly At THe End Of The Prior. ; But Not If You're JMPFing Here From A Level Transition. Maybe Load Environment_Flags Before JMPFing?
+	ld	Environment_Flags
 	sub	#1
 	bnz	.Draw_Road_Bridge
 	P_Draw_Road_Icy	road_rightboundary_ypos, road_leftboundary_ypos, track_pos_marker, AllBlack
@@ -1675,8 +1240,8 @@ bp	enemy_car2_x, 7, .enemy_car2_x_done
 	bnz	.Draw_Road_Transition_Normal_To_Icy
 	P_Draw_Road_Bridge	track_pos_marker
 	jmpf	.BGDraw_Done
-.Draw_Road_Transition_Normal_To_Icy
-	sub	#1 ; (Flag = 3)
+.Draw_Road_Transition_Normal_To_Icy ; (Flag = 3)
+	sub	#1
 	bz	.Build_Error_1 ; bnz	.Draw_Road_Transition_Normal_To_Bridge
 	jmpf	.Draw_Road_Transition_Normal_To_Bridge
 .Build_Error_1
@@ -1695,23 +1260,11 @@ bp	enemy_car2_x, 7, .enemy_car2_x_done
 	bz	.Build_Error_2
 	jmpf	.Draw_Road_Transition_Icy_To_Normal ; bnz	.Draw_Road_Transition_Icy_To_Normal
 .Build_Error_2
-
-; Lock Enemy Cars' Y-Positions If The Bridge Is Up.
-	;mov	#8, b
-	;mov	#16, c
-	;callf Get_Enemy_Cars_In_Place ;	b, c
-	
-	; bp	Cars_In_Place_Bool, 4, .Move_Enemy_Car3_Bridge ?? ; .Cars_And_Road_In_Place_Done
-	;mov	#6, b
-	;mov	#18, c
-	;callf	Get_Road_Boundaries_In_Place
-
 ; Move The Road Boundary Stripe Graphic
 	ld	track_pos_marker
 	add	speed_temp
 	st	track_pos_marker
-
-	ld	track_pos_marker
+	; ld	track_pos_marker
 	sub	#48
 	bn	acc, 7, .End_Transition_Normal_To_Bridge
 	P_Draw_Road_Transition_Test track_pos_marker
@@ -1728,14 +1281,14 @@ bp	enemy_car2_x, 7, .enemy_car2_x_done
 	ld	track_pos_marker
 	sub	#48
 	bn	acc, 7, .End_Transition_Icy_To_Normal
-	P_Draw_Road_Transition_Icy_To_Normal track_pos_marker ; P_Draw_Road_Transition_Test track_pos_marker
+	P_Draw_Road_Transition_Icy_To_Normal track_pos_marker
 	jmpf	.BGDraw_Done
 .End_Transition_Icy_To_Normal
 	st	track_pos_marker
 	mov	#50, Environment_Timer
 	mov	#0, Environment_Flags
-	mov	#0, Puddle_Timer	; Might Need To Add More Of These.
-	jmpf	.Draw_Road_Normal ; .BGDraw_Done
+	mov	#0, Puddle_Timer
+	jmpf	.Draw_Road_Normal
 .Draw_Road_Transition_Bridge_To_Normal ; ; (Flag = 6)
 	sub	#1
 	bnz	.BGDraw_Done
@@ -1750,88 +1303,47 @@ bp	enemy_car2_x, 7, .enemy_car2_x_done
 	mov	#0, Environment_Flags
 	jmpf	.BGDraw_Done
 .Skip_Transition_End_Flag
-	P_Draw_Road_Transition_Test track_pos_marker ; Make A New Variable Here, If NEeded.
-	;;jmpf	.BGDraw_Done
-; - Draw+Handle Road (Bridge)
-	;;ld	speed_temp
-	;;st	track_pos_marker
-.Cycle_Bridge
-	rorc ; Da Background
-	dec	track_pos_marker
-	ld	track_pos_marker
-	bnz	.Cycle_Bridge
-	; Draw White Chunks For The "Road" Part
-
-	; Collision --> Skip Swerve, Immediately "Splash"
-	; You Currently Have 8 And 16 As The Bounds. Consider 10 And 21, If TestBG_Bridgey Looks Good In Gameplay. 
-
-; Transitions:
-	; mov	#0, transition_number
-	; Add Speed Temp To This Every Frame ^
-	; Draw_BG_Bridge_To_Normal transition_number
-	; If Transition_Number > 48, Transition Is Done. Make Sure To Have The Road Boundaries At 8 And 24, Or W/E Numbers Are The Defaults.
+	P_Draw_Road_Transition_Test track_pos_marker
 	jmpf	.SkipWIPBridgeTransition
-	; If	(Normal To Bridge Transition Flag)
-	ld	road_leftboundary ; _ypos
+	ld	road_leftboundary
 	sub	#16
-	bnz	.Move_Road_LeftBoundary_Bridge
-	; Set Flag That It's Ready, Then JMPF To Right; Let The Code Know It's Ready For Full Bridge If Both Are Ready.
+	bnz	.Move_Road_LeftBoundary_Bridge ; Set Flag That It's Ready, Then JMPF To Right; Let The Code Know It's Ready For Full Bridge If Both Are Ready.
 .Move_Road_LeftBoundary_Bridge
 .Move_Road_LeftBoundary_Bridge_Left
 	bn	acc, 7, .Move_Road_LeftBoundary_Bridge_Right
 	dec	road_leftboundary
 .Move_Road_LeftBoundary_Bridge_Right
-	; Might Need To Calculate Again.
-	bp	acc, 7, .Move_Road_RightBoundary		; God Bless The 31-Year Old Victim And His Dog, Who Is In Heaven! God Bless Bella, Who Is Missing, And Her Owner!
+	bp	acc, 7, .Move_Road_RightBoundary ; ; Might Need To Calculate Again. GB31V+DIH,B+O&AA!
 	inc	road_leftboundary
 .Move_Road_RightBoundary
 .SkipWIPBridgeTransition	
-
 .BGDraw_Done
 %end
 
 %macro Change_Enemy_Car1_Speed
-.try2 ;Happy St. Joseph's Day!!!!!!!!!!!!!!!!!!!
-ld enemy_car_speed
-sub #2
-bnz .try1
-mov #1, enemy_car_speed
-jmp .enemyset_done
+	ld enemy_car_speed
+.try2 ;HS.JD'!
+	sub #2
+	bnz .try1
+	mov #1, enemy_car_speed
+	jmp .enemyset_done
 .try1
-ld enemy_car_speed
-sub #1
-bnz .try3
-mov #3, enemy_car_speed
-jmp .enemyset_done
+	ld enemy_car_speed
+	sub #1
+	bnz .try3
+	mov #3, enemy_car_speed
+	jmp .enemyset_done
 .try3
-ld enemy_car_speed
-sub #3
-bnz .enemyset_done
-mov #2, enemy_car_speed
+	ld enemy_car_speed
+	sub #3
+	bnz .enemyset_done
+	mov #2, enemy_car_speed
 .enemyset_done
 %end
 
 %macro Change_Enemy_Car2_Speed
-;.try2 ;Happy St. Joseph's Day!!!!!!!!!!!!!!!!!!!
-;ld enemy_car2_speed
-;sub #2
-;bnz .try1_2
-;mov #1, enemy_car2_speed
-;jmp .enemy2set_done
-;.try1_2
-;ld enemy_car2_speed
-;sub #1
-;bnz .try3_2
-;mov #3, enemy_car2_speed
-;jmp .enemy2set_done
-;.try3_2
-;ld enemy_car2_speed
-;sub #3
-;bnz .enemy2set_done
-;mov #2, enemy_car2_speed
-;.enemy2set_done
-random
-st	enemy_car2_speed
+	random ; Thanks Marcus For This Function From Tetris.ASM! ;.try2 ;HSJ'D!
+	st	enemy_car2_speed
 %end
 
 _Check_Enemy_Car_Collision:
@@ -1857,8 +1369,6 @@ _Check_Enemy_Car_Collision:
 	set1	collision_debugging_flags, 3
 	set1	collision_debugging_flags, 2
 	jmpf	.collision_check_player_left_side
-	;bp	acc, 7, .collision_check_player_bottom_side ; .collision_top_false
-	;set1	collision_debugging_flags, 3
 .collision_check_player_bottom_side
 	ld	player_car_y
 	sub	c
@@ -1878,25 +1388,14 @@ _Check_Enemy_Car_Collision:
 	bp	acc, 7, .set_collision_flag
 	set1	collision_debugging_flags, 0
 .set_collision_flag
-	; bp	collision_debugging_flags, 1, .horizontal_collision_true
-	; bp	collision_debugging_flags, 0, .horizontal_collision_true
-	; jmp	.done_colliding
 	bn	collision_debugging_flags, 1, .done_colliding
 	bn	collision_debugging_flags, 0, .done_colliding
-	; jmp	.done_colliding
-; .horizontal_collision_true
-	; bp	collision_debugging_flags, 3, .vertical_collision_true
-	; bp	collision_debugging_flags, 2, .vertical_collision_true
-	; jmp	.done_colliding
 	bn	collision_debugging_flags, 3, .done_colliding
 	bn	collision_debugging_flags, 2, .done_colliding
-	; jmp	.done_colliding
-; .vertical_collision_true
 	mov	#0, player_car_speed
 	set1	collision_debugging_flags, 4 ; This Means Collision Flag Is On.
 .done_colliding
-	; Reset The Four Collision Flags, To Free Them Up For The Next Car/Collision Check.
-	not1	collision_debugging_flags, 3
+	not1	collision_debugging_flags, 3 ; Reset The Four Collision Flags, To Free Them Up For The Next Car/Collision Check.
 	not1	collision_debugging_flags, 2
 	not1	collision_debugging_flags, 1
 	not1	collision_debugging_flags, 0
@@ -1959,7 +1458,7 @@ _Check_Enemy_Car_Collision:
 	set1	collision_debugging_flags, 0
 .no_right_side_collision
 
-.handle_leftright	; 5/31: Ok, So I Think You Are Going To Want Collision To Happen IF (Top Or Bottom Flag.), AND (Left Or Right Flag.).
+.handle_leftright
 .draw_num4
 	mov	#<Gear_Marker_Low, acc
 	st	trl
@@ -1984,14 +1483,6 @@ _Check_Enemy_Car_Collision:
 	not1	collision_debugging_flags, 2
 	not1	collision_debugging_flags, 1
 	not1	collision_debugging_flags, 0
-	; Jump To The Start Here, Then Increment Another Flag. Or A Third B, C, Or Something. Once We've Cycled Through All 2/3(?) Cars, Exit The Macro. Or, Look Into "Call" From Trent And Marcus.
-	;bp	collision_debugging_flags, 5, .done_colliding
-	;set1	collision_debugging_flags, 5
-	;ld	enemy_car2_x
-	;st	b
-	;ld	enemy_car2_y
-	;st	c
-	;jmp	.top_side_collision_check
 .done_colliding
 %end
 
@@ -2033,8 +1524,6 @@ _Check_Puddle_Collision:
 	ret
 
 Move_Left_Road_Boundary:
-; dec	RoadLeftVarCounter
-; mov	#3, RoadLeftVarCounter
 .RoadLeft_Center
 	ld	RoadLeftVarNum
 	bnz	.RoadLeft_Left
@@ -2052,23 +1541,9 @@ Move_Left_Road_Boundary:
 	callf	Move_Left_Road_Boundary_Right
 .RoadLeft_Skip
 	dec	RoadLeftVarCounter
-	; ld	RoadLeftVarCounter
-	; sub	#1
-	; st	RoadLeftVarCounter
 	ld	RoadLeftVarCounter
-	
-	;bp	RoadLeftVarCounter, 7, .Skip_255
-	;mov	#7, RoadLeftVarCounter
-;.Skip_255
-	bnz	.Skip_RoadLeftVar_Reset; assignment
-	; rand2 ; callf rand
+	bnz	.Skip_RoadLeftVar_Reset
 	callf	rand3
-	; mov	#7, RoadLeftVarCounter
-	;inc	RoadLeftVarNum
-	;ld	RoadLeftVarNum
-	;sub	#3
-	;bnz	.Skip_RoadLeftVar_Reset
-	;mov	#0, RoadLeftVarNum
 	bp	RoadLeftVarCounter, 1, .move_left_road_boundary
 	mov	#0, RoadLeftVarNum
 	jmpf	.Skip_RoadLeftVar_Reset
@@ -2077,13 +1552,6 @@ Move_Left_Road_Boundary:
 	bp	RoadLeftVarCounter, 0, .Skip_RoadLeftVar_Reset
 	mov	#2, RoadLeftVarNum
 .Skip_RoadLeftVar_Reset
-	; ld	RoadLeftVarNum ; 0-7. 
-	; callf Move_Left_Road_Boundary_Left
-	; ld	RoadLeftVarCounter
-	; Sub #8 (Or Whatever Time We Decide)
-	; BNZ .Skip_RoadLeftVar_Reassignment
-	; Do Da Random Numbers
-;.Skip_RoadLeftVar_Reassignment
 	ret
 
 Move_Right_Road_Boundary:
@@ -2119,9 +1587,9 @@ Move_Right_Road_Boundary:
 
 Move_Left_Road_Boundary_Left:
 	ld	road_leftboundary_ypos
-	sub	#168 ; #174 ; #180
+	sub	#168
 	bn	acc, 7, .keep_leftroad_rightside_boundary
-	ld	road_leftboundary_ypos ; add	#180
+	ld	road_leftboundary_ypos
 	add	#6
 	st	road_leftboundary_ypos
 	inc	road_leftboundary
@@ -2163,20 +1631,22 @@ Move_Right_Road_Boundary_Right:
 	dec	road_rightboundary
 .keep_rightroad_rightside_boundary
 	ret
-
-; How To Determine How To Move The Road?
-; Let's pretend we have a way to generate a random number...
-; Generate_Next_Left_Road:
-	; Returns --> Direction[0-3], Time[0-7or15]		;	0: Stay, 1: Left, 2: Right, 3: Force Both To (Stay/Left/Right?)
-	; NOTE: Note that you'll have to slow down the "Time" when the Player Car is moving at a slower speed! E.G. Time * 4 = Time, Add Speed-Inc Every Frame. 
+	
 %macro Draw_HUD
+.Draw_HUD_Banner
+	ld	HUD_Banner_Timer
+	bz	.Draw_HUD_Regular
+	dec	HUD_Banner_Timer
+	Draw_HUD_Banner
+	jmpf	.HUD_Regular_Done
+.Draw_HUD_Regular
 ; Prepare the frame buffer address
     mov     #P_WRAM_BANK, vrmad2
     mov     #P_WRAM_ADDR, vrmad1
     mov     #%00010000, vsel
 ; Draw HUD With Timer
 .DrawHUD_Timer
-ld	Lives_Flag ;; ld Lives Flag ; bnz	.Draw_Score_Lives
+	ld	Lives_Flag
 	bnz	.Draw_HUD_Lives
 ; Draw One Black Line
 ; Draw The Timer
@@ -2189,7 +1659,7 @@ ld	Lives_Flag ;; ld Lives Flag ; bnz	.Draw_Score_Lives
     st	score_tens_digit
     ld  b
 	st	score_ones_digit
-	P_Draw_Timer score_ones_digit, score_tens_digit ;timer ; Get The Two Timer Digits Here, Or Inside The Function?
+	P_Draw_Timer score_ones_digit, score_tens_digit
 	jmpf	.Draw_HUD_Score
 .Draw_HUD_Lives
 	P_Draw_Lives	Lives_Flag
@@ -2227,14 +1697,12 @@ ld	Lives_Flag ;; ld Lives Flag ; bnz	.Draw_Score_Lives
 	st	score_digit_temp ;
 	ld	b
 	st	score_ten_thousands_digit
-	; st	score_digit_temp ; Hey, Looking At The ElysianVMU RAM Address Debugger, This Works! 9b And 37 In This Instance Tonight, A.K.A. 155 And 55 In Decimal, From Hex. Need To Divide By 10 For The Ones Digit.
-	; Tens Digit: Divide Score By 10, = Result
 .Draw_Score_Timer
-	ld	Lives_Flag ;; ld Lives Flag ; bnz	.Draw_Score_Lives
+	ld	Lives_Flag ; 4 Digits Of Score
 	bnz	.Draw_Score_Lives
 	P_Draw_Score_Timer score_ten_thousands_digit, score_thousands_digit, score_hundreds_digit, score_tens_digit, score_ones_digit
 	jmpf	.Done_Drawing_scores
-.Draw_Score_Lives
+.Draw_Score_Lives ; 5 Digits Of Score
 	P_Draw_Score_Lives score_ten_thousands_digit, score_thousands_digit, score_hundreds_digit, score_tens_digit, score_ones_digit
 
 .Done_Drawing_Scores
@@ -2251,6 +1719,77 @@ ld	Lives_Flag ;; ld Lives Flag ; bnz	.Draw_Score_Lives
 	mov	#>Gear_Marker_High_Tiles, trh
 	P_Draw_Gear_Marker
 .done_drawing_hud
+.HUD_Regular_Done
+
+; HUD Transitions:
+	; If (Transition Flags)
+	; Decrement Said Flag ^, +/Or Increment It If You Prefer Or It's Easier.
+	; Draw_HUD_DMD Banner_Name_Number, HUD_Timer
+	; When HUD_Timer Reaches Limit, Turn Off Transition Flags.
+.handle_p
+	ld	player_car_speed
+	bz	.Skip_Environment_Timer_Decrement
+	dec	Environment_Timer
+.Skip_Environment_Timer_Decrement
+	ld	Environment_Timer
+	bnz	.Calculate_Timer
+.EF_FromNormal
+	ld	Environment_Flags
+	bnz	.EF_From_Icy
+	; If (Timer And Not Lives)
+	ld	Lives_Flag
+	bz	.Icy_From_Normal
+.Bridge_From_Normal
+	bp	score, 0, .Icy_From_Normal
+	mov	#4, Environment_Flags ;/
+	mov	#30, Environment_Timer
+	; mov	#12, FTestTimer
+	clr1	Enemy_Car_Flags, 4
+	clr1	Enemy_Car_Flags, 5
+	jmpf	.Calculate_Timer
+.Icy_From_Normal
+	mov	#3, Environment_Flags ; Else, Calculate If Score's Ones Digit Is Odd Or Even, And Send To Icy Or Bridge Accordingly.
+	mov	#30, Environment_Timer
+	mov	#3, HUD_Banner_Number
+	mov	#16, HUD_Banner_Timer
+	jmpf	.handle_p ; .Calculate_Timer
+.EF_From_Icy
+	ld	Environment_Flags
+	sub	#1
+	bnz	.EF_From_Bridge
+	mov	#5, Environment_Flags
+	mov	#30, Environment_Timer
+	jmpf	.Calculate_Timer
+.EF_From_Bridge
+	ld	Environment_Flags
+	sub	#2
+	bnz	.EF_TwoToZero ; Rename This
+	mov	#6, Environment_Flags
+	mov	#30, Environment_Timer
+	mov	#0, Cars_In_Place_Bool
+	jmpf	.Calculate_Timer
+.EF_TwoToZero
+.Calculate_Timer
+	ld	Lives_Flag	;	Switch This To Have It As Like #200 Or Something, When In Timer Mode.
+	bnz	.skip_timer_frame_flags_reset
+	bp	timer, 7, .Set_Timer_To_Lives ; Check If It's Expired, And We Need To Switch To Lives.
+	jmpf	.Countdown_Timer
+.Set_Timer_To_Lives
+	mov	#3, Lives_Flag
+	mov	#0, Collision_Debugging_Flags ; To Prevent Freezing/Softlocking When Player Is Crashing As The Timer Expires And Switches To Lives. Ok, Maybe This Didn't Work.
+	mov	#10, HUD_Banner_Timer
+	mov	#0, HUD_Banner_Number
+	jmp	.skip_timer_frame_flags_reset
+.Countdown_Timer
+	inc	timer_frame_flags
+	bn	timer_frame_flags, 2, .skip_timer_frame_flags_reset
+	mov	#0, timer_frame_flags
+	dec	timer
+	ld	timer
+	bz	.skip_timer_to_lives_transition
+	; Set The Lives Flag. Lives = 2/or/3.
+.skip_timer_to_lives_transition
+.skip_timer_frame_flags_reset
 %end
 
 %macro	Draw_HUD_Banner
@@ -2258,10 +1797,9 @@ ld	Lives_Flag ;; ld Lives Flag ; bnz	.Draw_Score_Lives
 %end
 
 %macro Draw_Player_Car
-; Draw Headlights
-	jmpf	.Headlights_Done
+	jmpf	.Headlights_Done ; Draw Headlights
 	ld	player_car_x
-	sub	#20;18
+	sub	#20
 	st	b
 	ld	player_Car_y
 	sub	#6
@@ -2273,13 +1811,9 @@ ld	Lives_Flag ;; ld Lives Flag ; bnz	.Draw_Score_Lives
 	ld	player_Car_y
 	sub	#6
 	st	c
-.Headlights_Done
-	; P_Draw_Sprite_Mask	Headlight_Back_Sprite_Address, b, c ; 2/9
-	; P_Draw_Player_Car_Grayscale player_car_x, player_car_y
-	; bp	collision_debugging_flags, 4, .done_drawing_player_car
+.Headlights_Done ; P_Draw_Sprite_Mask	Headlight_Back_Sprite_Address, b, c ; 2/9
 	bn	collision_debugging_flags, 4, .drawing_player_car
-	; P_Draw_Sprite	player_car_spr_addr_b, player_car_x, player_car_y
-	P_Draw_Sprite_Mask	player_car_spr_addr_b, player_car_x, player_car_y ; I'm assuming that player_car_spr_addr_b is already populated by the Collision/Crash Macro when this is called? Better double-check.
+	P_Draw_Sprite_Mask	player_car_spr_addr_b, player_car_x, player_car_y
 	jmpf	.done_drawing_player_car
 .drawing_player_car
 	bn frame_flags, 5, .draw_white_player_car
@@ -2287,11 +1821,11 @@ ld	Lives_Flag ;; ld Lives Flag ; bnz	.Draw_Score_Lives
 	P_Draw_Sprite_Mask player_car_spr_addr_b, player_car_x, player_car_y
 .draw_white_player_car
 	bp frame_flags, 5, .done_drawing_player_car
-	bp	Invincibility_Flag, 0, .done_drawing_player_car ;	bn	swerve_flags, 6, .done_drawing_player_car
+	bp	Invincibility_Flag, 0, .done_drawing_player_car
 	P_Draw_Sprite_Mask player_car_spr_addr_w, player_car_x, player_car_y
 .done_drawing_player_car
 .Draw_Driver
-	jmpf .Skip_Drawing_Driver
+	jmpf .Skip_Drawing_Driver ; This is Crashing the Game a lot for now. Revisit this later.
 	ld	StickFigure_Bool
 	bz	.Skip_Drawing_Driver
 	ld	StickFigure_Y
@@ -2311,67 +1845,54 @@ ld	Lives_Flag ;; ld Lives Flag ; bnz	.Draw_Score_Lives
 .Skip_Drawing_Driver
 %end
 
-%macro Handle_Test_Track ; Going To Refactor This With DrawPixels From Sebastian.
-	P_Draw_Background_Constant Test_Track_0
+%macro Handle_Test_Track
+	P_Draw_Background_Constant Test_Track_0 ; Thanks Sebastian For DrawPixels Code Documentation.
 	ld	track_pos_marker
 	add	speed_temp
-	; inc	track_pos_marker
-	; add	#1
 	st	track_pos_marker
 ; If Bit 3 Is Set, Subtract 8.
 	bn	track_pos_marker, 3, .skip_subtrackt
-	;sub	#8, track_pos_marker
 	sub	#8
 	st	track_pos_marker
 .skip_subtrackt
 	ld	track_pos_marker
 	bnz	.TrackBG1
-	; P_Draw_Background_Constant Test_Track_0
 	jmp	.BGMacroDrawDone
 .TrackBG1
 	ld	track_pos_marker
 	sub #1
 	bnz	.TrackBG2
-	; P_Draw_Background_Constant Test_Track_1
 	jmp	.BGMacroDrawDone
 .TrackBG2
 	ld	track_pos_marker
 	sub #2
 	bnz	.TrackBG3
-	; P_Draw_Background_Constant Test_Track_2
 	jmp	.BGMacroDrawDone
 .TrackBG3
 	ld	track_pos_marker
 	sub #3
 	bnz	.TrackBG4
-	; P_Draw_Background_Constant Test_Track_3
 	jmp	.BGMacroDrawDone
 .TrackBG4
 	ld	track_pos_marker
 	sub #4
 	bnz	.TrackBG5
-	; P_Draw_Background_Constant Test_Track_4
 	jmp	.BGMacroDrawDone
 .TrackBG5
 	ld	track_pos_marker
 	sub #5
 	bnz	.TrackBG6
-	; P_Draw_Background_Constant Test_Track_5
 	jmp	.BGMacroDrawDone
 .TrackBG6
 	ld	track_pos_marker
 	sub #6
 	bnz	.TrackBG7
-	; P_Draw_Background_Constant Test_Track_6
 	jmp	.BGMacroDrawDone
 .TrackBG7
 	ld	track_pos_marker
 	sub #7
 	bnz	.BGMacroDrawDone
-	; P_Draw_Background_Constant Test_Track_7
-	; jmp	.BGMacroDrawDone
 .BGMacroDrawDone
-; P_Draw_Background	BG_Frame
 %end
 
 %macro Check_Enemy_Cars_Collision
@@ -2404,9 +1925,6 @@ ld	Lives_Flag ;; ld Lives Flag ; bnz	.Draw_Score_Lives
 %end
 
 %macro Check_Ambulance_Collision
-; STARTSKIP
-; Ambulance Collision, Find Out Where To Move This To..;
-	; jmpf .Skip_Ambulance_Collision
 .Handle_Ambulance_Collision
 	ld	Ambulance_Timer
 	bnz	.Skip_Ambulance_Collision
@@ -2419,8 +1937,7 @@ ld	Lives_Flag ;; ld Lives Flag ; bnz	.Draw_Score_Lives
 .Ambulance_Collision_Top
 	ld	Ambulance_Y
 	sub	Player_Car_Y
-	; -3 And + 7.
-	sub	#3
+	sub	#3 ; -3 And + 7.
 	bp	acc, 7, .Ambulance_Collision_Bottom
 	jmpf	.Skip_Ambulance_Collision
 .Ambulance_Collision_Bottom
@@ -2430,19 +1947,14 @@ ld	Lives_Flag ;; ld Lives Flag ; bnz	.Draw_Score_Lives
 	bp	acc, 7, .Skip_Ambulance_Collision
 .Ambulance_Hit_Player
 	set1	collision_debugging_flags, 4
-	; jmpf	.collision_animation Could this be causing the freeze? (It wasn't, lol, but i dig the idea.). Move everything to macros, and have every jmpf be local. Then, ensure everything is in proper order. If those JMPFs were to skip something, put a flag in to skip it instead.
 .Skip_Ambulance_Collision
-; ENDSKIP
 %end
 
 %macro Draw_Enemy_Cars
 	ld	enemy_car_x
-	; sub	#48
 	st	enemy_speed_temp
-	; bp	enemy_speed_temp, 5, .done_drawing_enemy_car
 	bp	enemy_speed_temp, 7, .done_drawing_enemy_car
 	bp	enemy_speed_temp, 6, .done_drawing_enemy_car
-	; bp	enemy_speed_temp, 5, .over_thirtytwo
 	bn	enemy_speed_temp, 5, .under_thirtytwo
 .over_thirtytwo
 	bp	enemy_speed_temp, 4, .done_drawing_enemy_car
@@ -2450,59 +1962,24 @@ ld	Lives_Flag ;; ld Lives Flag ; bnz	.Draw_Score_Lives
 .under_thirtytwo
 	
 .draw_enemy_car
-;.OnBridgeOrNo
-;	ld	Environment_Flags
-;	sub	#2
-;	bnz	.NotOnBridge
-;	mov	#8, enemy_car_y
-;	mov	#16, enemy_car2_y
-;.NotOnBridge
 	bn frame_flags, 5, .draw_white_enemy_car
 	.draw_black_enemy_car
 	P_Draw_Sprite_Mask enemy_car_spr_addr_b, enemy_car_x, enemy_car_y
 	.draw_white_enemy_car
 	bp frame_flags, 5, .done_drawing_enemy_car
-	; P_Fill_Screen player_car_speed
 	P_Draw_Sprite_Mask enemy_car_spr_addr_w, enemy_car_x, enemy_car_y
 .done_drawing_enemy_car
 
 .draw_second_car
 	bn	twocars_enabled, 0, .dontdraw_second_car
-	;ld	enemy_car_x
-	;add	#15
-	;st	enemy_car2_x
-	;ld	enemy_car_y
-	;sub	#3
-	;st	enemy_car2_y
-	;P_Draw_Sprite_Mask enemy_car2_spr_addr_b, enemy_car2_x, enemy_car2_y
-
 	ld	enemy_car2_x
-	; sub	#48
 	st	enemy_speed_temp
-	; bp	enemy_speed_temp, 5, .dontdraw_second_car
 	bp	enemy_speed_temp, 7, .dontdraw_second_car
 	bp	enemy_speed_temp, 6, .dontdraw_second_car
-	; bp	enemy_speed_temp, 5, .over_thirtytwo_car2
 	bn	enemy_speed_temp, 5, .under_thirtytwo_car2
 .over_thirtytwo_car2
 	bp	enemy_speed_temp, 4, .dontdraw_second_car
-	; jmp .draw_enemy_car
 .under_thirtytwo_car2
-	
-
-; Absolutely Baffled As To Why This Breaks It:
-;bn	frame_flags, 5, .abcde
-;mov	#0, enemy_car2_y
-;bn	collision_debugging_flags, 0, .abcd
-;mov	#8, enemy_car2_y
-; bn	collision_debugging_flags, 1, .abcde
-;mov	#24, enemy_car2_y
-;.abcd
-; bn	collision_debugging_flags, 1, .abcde
-;mov	#32, enemy_car2_y
-;.abcde
-
-
 	bn frame_flags, 5, .draw_white_enemy_car2
 .draw_black_enemy_car2
 	P_Draw_Sprite_Mask enemy_car2_spr_addr_b, enemy_car2_x, enemy_car2_y
@@ -2514,7 +1991,6 @@ ld	Lives_Flag ;; ld Lives Flag ; bnz	.Draw_Score_Lives
 
 %macro Draw_Ambulance
 .Draw_Ambulance
-; jmpf .Skip_Ambulance_Draw ; 12/19 ; This doesn't seem to have done anything. Lol.  Oh wait, i was still calling Driving_Test_Regular. Lolz
 	bp	Ambulance_X, 7, .Skip_Ambulance_Draw
 	bp	Ambulance_X, 6, .Skip_Ambulance_Draw
 	ld	Ambulance_X
@@ -2522,9 +1998,6 @@ ld	Lives_Flag ;; ld Lives Flag ; bnz	.Draw_Score_Lives
 	bn	acc, 7, .Skip_Ambulance_Draw
 	P_Draw_Sprite_Mask	Ambulance_Sprite_Address, Ambulance_X, Ambulance_Y
 .Skip_Ambulance_Draw
-	;mov	#24,	b
-	;mov	#8,	c
-	;P_Draw_Sprite_Mask	Ambulance_Sprite_Address, b, c ; Testing Collision With This. With Ambulance At Y-Value Of 8, Collision Should Happen At Y-Values Of 5 And 15, But Not 4 And 16. At X-Value Of 28, 42 Is A Collision But 43 Shouldn't Be. At X-Value Of 45, 40 Isn't A Collison But 41 Would Be. So, 14 Ahead To 4 Behind.
 %end
 
 %macro Draw_Ambulance_Caution_Triangle
