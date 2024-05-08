@@ -11,7 +11,7 @@ A Port Of The 1979 Arcade Game To The Dreamcast's VMU.
 
 ## Many Thanks To:
 - Walter Tetzner, For The WaterBear Compiler And Its .VMI Generation Tool
-- Kresna Susila, For LibPerspective (Please note that its Code was edited slightly for this, changing a few JMPs and CALLs to JMPFs and CALLFs to circument some Build Errors in the Monaco GP Code)
+- Kresna Susila, For LibPerspective (Please note that its Code was edited slightly for this, changing a few JMPs and CALLs to JMPFs and CALLFs to circumvent some Build Errors in the Monaco GP Code)
 - Falco Girgis, For ElysianVMU And The Ultimate VMU Resource Page On DC-Emulation
 - Dmitry Grinberg, For The VMU Documentation Page
 - Marcus Comstedt, For The VMU Resources Page And For Tetris.ASM (And It's "Random" Function)
