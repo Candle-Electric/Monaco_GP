@@ -22,6 +22,7 @@ A Port Of The 1979 Arcade Game To The Dreamcast's VMU.
 - RetroOnyx, For The Coder's Cable
 - Ian Michael, For Many Dreamcast Coding Resources
 - BruceLeeto And NeoGeoFreak2004, For Reaching Out With Coding Questions
+- PomeGD, For Sharing This And The VMU Beginners' Development Tutorial On HatenaBlog
 - Black Squirrel And Akane On Sega Retro, For The Scan Of "Sega Ages Memorial Selection Vol. 2" And Its Monaco GP Logo On The Back Cover
 - Ben Geeves, For the Excellent Monaco GP Remake On Windows
 - All Original Monaco GP Staff And Players
